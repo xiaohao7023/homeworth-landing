@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HomeWorth — Net Worth Tracker App | Track Family Wealth in 2 Min/Week</title>
+  <meta name="description" content="Track your family net worth without daily logging. HomeWorth is the simplest way to see your total wealth, assets, and debts — updated in just 2 minutes a week. Free download.">
+  <meta name="keywords" content="net worth tracker, family net worth, asset tracker, wealth management">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="HomeWorth — Track Your Net Worth in 2 Minutes a Week">
+  <meta property="og:description" content="No daily expense logging. Just a clear picture of your family's wealth.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="og-image.png">
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://homeworth.app/">
+
+  <!-- Tailwind CSS -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#F5F8FF',
+              100: '#EBF2FF',
+              500: '#3A7BFF',
+              600: '#2D6AE0',
+              700: '#1E5AC7',
+            },
+            asset: {
+              cash: '#3A7BFF',
+              property: '#667EEA',
+              investment: '#37C8A9',
+              debt: '#FF8A65',
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    html { scroll-behavior: smooth; }
+    .fade-in { opacity: 0; transform: translateY(20px); transition: all 0.6s ease-out; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+    .gradient-text {
+      background: linear-gradient(135deg, #3A7BFF, #667EEA);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  </style>
+
+  <!-- FAQ Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is a net worth tracker?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A net worth tracker helps you see the total value of everything you own (cash, investments, property) minus what you owe (debts, loans). Unlike budgeting apps that focus on daily spending, HomeWorth gives you the big picture of your financial health."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is HomeWorth free?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes! The core features — tracking unlimited assets, viewing your net worth, and getting weekly reminders — are completely free. Pro subscribers get additional features like trend history and data export."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Do I need to log every transaction?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Absolutely not. That's exactly why we built HomeWorth. Most budgeting apps require daily logging, which is exhausting. HomeWorth only asks you to update your asset balances once a week — takes about 2 minutes."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is my financial data safe?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "100%. HomeWorth stores all data locally on your iPhone. Nothing is uploaded to our servers, the cloud, or any third party. Your financial information never leaves your device."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can couples use HomeWorth together?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. You can track all household assets in one place — cash accounts, investments, real estate, and shared debts."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What's the difference between net worth and a budget?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A budget tracks your income and expenses month-to-month. Your net worth is the total value of everything you own minus everything you owe. Budgets help you spend less. Net worth tracking helps you build wealth."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does HomeWorth connect to my bank?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No, and that's intentional. We don't ask for bank passwords or account numbers. You manually enter your asset values — which is what makes HomeWorth private, secure, and surprisingly simple."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How does the 7-day free trial work?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "When you subscribe to the yearly plan, you get 7 days of Pro features for free. If you cancel within those 7 days, you're not charged. You can cancel anytime in your iPhone settings."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <!-- SoftwareApplication Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "HomeWorth",
+    "operatingSystem": "iOS",
+    "applicationCategory": "FinanceApplication",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+</head>
+<body class="font-sans text-slate-800 bg-white">
+
+  <!-- Navbar -->
+  <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-transparent">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <div class="flex items-center">
+          <span class="text-xl font-bold text-slate-900">HomeWorth</span>
+        </div>
+        <div class="hidden md:flex items-center space-x-4">
+          <a href="#features" class="text-sm text-slate-600 hover:text-slate-900">Features</a>
+          <a href="#pricing" class="text-sm text-slate-600 hover:text-slate-900">Pricing</a>
+          <a href="#faq" class="text-sm text-slate-600 hover:text-slate-900">FAQ</a>
+          <a href="https://apps.apple.com/app/idYOUR_APP_ID" class="bg-brand-500 hover:bg-brand-600 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors">
+            Download
+          </a>
+        </div>
+        <!-- Mobile: only CTA -->
+        <a href="https://apps.apple.com/app/idYOUR_APP_ID" class="md:hidden bg-brand-500 hover:bg-brand-600 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors">
+          Download
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="pt-24 pb-16 md:pt-32 md:pb-24 bg-brand-50">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid md:grid-cols-2 gap-12 items-center">
+          <div class="fade-in">
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight text-slate-900 mb-6">
+              Track Your Net Worth in <span class="gradient-text">2 Minutes</span> a Week
+            </h1>
+            <p class="text-lg md:text-xl text-slate-600 mb-8 leading-relaxed">
+              No daily expense logging. No complicated budgets.<br>
+              Just a clear picture of your family's wealth — updated weekly.
+            </p>
+          <!-- QR Code -->
+          <div class="flex flex-col items-start gap-4">
+            <img src="IMG_3042.JPG" alt="Scan to download HomeWorth on App Store" class="rounded-2xl shadow-lg w-40 h-40 object-contain bg-white">
+            <p class="text-sm text-slate-500">Scan with your iPhone camera</p>
+          </div>
+        </div>
+        <div class="fade-in relative">
+          <!-- 3 Screenshots side by side -->
+          <div class="flex gap-3 justify-center">
+            <img src="iPhone 14 Plus-1.png" alt="HomeWorth - Add assets" class="w-auto h-[28rem] rounded-2xl shadow-xl object-cover">
+            <img src="iPhone 14 Plus-3.png" alt="HomeWorth - Trend chart" class="w-auto h-[28rem] rounded-2xl shadow-xl object-cover">
+            <img src="iPhone 14 Plus-1 (2).png" alt="HomeWorth - Weekly reminder" class="w-auto h-[28rem] rounded-2xl shadow-xl object-cover">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Problem -->
+  <section class="py-16 md:py-24 bg-white">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16 fade-in">
+        <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Most Finance Apps Make You Do Too Much</h2>
+        <p class="text-lg text-slate-600">Sound familiar?</p>
+      </div>
+      <div class="grid md:grid-cols-3 gap-8 fade-in">
+        <div class="bg-red-50 border border-red-100 rounded-2xl p-8">
+          <div class="text-4xl mb-4">❌</div>
+          <h3 class="text-lg font-semibold text-slate-900 mb-2">"Log every transaction?"</h3>
+          <p class="text-slate-600">Who has time to categorize every coffee, grocery, and Uber ride?</p>
+        </div>
+        <div class="bg-red-50 border border-red-100 rounded-2xl p-8">
+          <div class="text-4xl mb-4">❌</div>
+          <h3 class="text-lg font-semibold text-slate-900 mb-2">"Budgets that don't stick"</h3>
+          <p class="text-slate-600">You set a budget in January. You forget it by February.</p>
+        </div>
+        <div class="bg-red-50 border border-red-100 rounded-2xl p-8">
+          <div class="text-4xl mb-4">❌</div>
+          <h3 class="text-lg font-semibold text-slate-900 mb-2">"No big picture"</h3>
+          <p class="text-slate-600">You know what you spent. But do you know what you're worth?</p>
+        </div>
+      </div>
+      <div class="text-center mt-12 fade-in">
+        <p class="text-2xl font-bold text-brand-500">There's a better way.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why Local-Only: Privacy Section -->
+  <section class="py-16 md:py-20 bg-white border-y border-slate-100">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid md:grid-cols-2 gap-10 items-center fade-in">
+        <div>
+          <div class="inline-flex items-center gap-2 bg-blue-50 text-brand-500 text-sm font-semibold px-4 py-2 rounded-full mb-4">
+            <span>🔒</span> Privacy First
+          </div>
+          <h2 class="text-3xl font-bold text-slate-900 mb-4">Your financial data stays<br>on your phone. Always.</h2>
+          <p class="text-slate-600 leading-relaxed mb-6">
+            Most finance apps ask for your bank password, upload your transactions to the cloud, and sell your data to advertisers. HomeWorth does none of that.
+          </p>
+          <ul class="space-y-3 text-slate-700">
+            <li class="flex items-start gap-3">
+              <span class="text-green-500 mt-0.5">✓</span>
+              <span><strong>No cloud.</strong> All data stored locally on your iPhone</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-green-500 mt-0.5">✓</span>
+              <span><strong>No accounts.</strong> No email, no password, no account to hack</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-green-500 mt-0.5">✓</span>
+              <span><strong>No data sales.</strong> We don't monetize your data. Period.</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-green-500 mt-0.5">✓</span>
+              <span><strong>No bank access.</strong> We never ask for your banking credentials</span>
+            </li>
+          </ul>
+        </div>
+        <div class="flex justify-center">
+          <div class="bg-slate-50 rounded-3xl p-8 border border-slate-200 inline-flex flex-col items-center gap-4">
+            <div class="text-6xl">📱</div>
+            <div class="text-center">
+              <p class="text-2xl font-extrabold text-slate-900">100%</p>
+              <p class="text-sm text-slate-500">Local Storage</p>
+            </div>
+            <p class="text-xs text-slate-400 text-center max-w-[200px]">Your data never leaves your device. Not our servers. Not the cloud. Anywhere.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section id="features" class="py-16 md:py-24 bg-slate-50">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16 fade-in">
+        <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">See Your Wealth, Not Your Receipts</h2>
+        <p class="text-lg text-slate-600">Everything you need. Nothing you don't.</p>
+      </div>
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 fade-in">
+        <div class="bg-white rounded-2xl p-8 shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
+          <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-4">
+            <span class="text-2xl">📊</span>
+          </div>
+          <h3 class="text-lg font-semibold text-slate-900 mb-2">Your Complete Net Worth</h3>
+          <p class="text-slate-600 text-sm">Cash + investments + property − debts. One number tells you where you stand.</p>
+        </div>
+        <div class="bg-white rounded-2xl p-8 shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
+          <div class="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center mb-4">
+            <span class="text-2xl">⏱️</span>
+          </div>
+          <h3 class="text-lg font-semibold text-slate-900 mb-2">2 Minutes a Week</h3>
+          <p class="text-slate-600 text-sm">Update your assets once a week. That's it. No daily check-ins required.</p>
+        </div>
+        <div class="bg-white rounded-2xl p-8 shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
+          <div class="w-12 h-12 bg-teal-100 rounded-xl flex items-center justify-center mb-4">
+            <span class="text-2xl">👨‍👩‍👧‍👦</span>
+          </div>
+          <h3 class="text-lg font-semibold text-slate-900 mb-2">Built for Families</h3>
+          <p class="text-slate-600 text-sm">Track household assets together. See the full picture, not just your personal account.</p>
+        </div>
+        <div class="bg-white rounded-2xl p-8 shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
+          <div class="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center mb-4">
+            <span class="text-2xl">🔒</span>
+          </div>
+          <h3 class="text-lg font-semibold text-slate-900 mb-2">Privacy First</h3>
+          <p class="text-slate-600 text-sm">All data stays on your device. We don't store, sell, or even see your financial information.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="py-16 md:py-24 bg-brand-50">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12 fade-in">
+        <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Stop Budgeting. Start Building Wealth.</h2>
+        <p class="text-lg text-slate-600">Thousands of families trust HomeWorth to track what actually matters.</p>
+      </div>
+
+      <!-- Comparison Table -->
+      <div class="max-w-3xl mx-auto fade-in mb-12">
+        <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+          <div class="grid grid-cols-4 text-center border-b border-slate-200">
+            <div class="p-4 font-semibold text-slate-500 text-sm">Feature</div>
+            <div class="p-4 font-bold text-slate-900 bg-red-50/50">Mint</div>
+            <div class="p-4 font-bold text-slate-900 bg-indigo-50/50">YNAB</div>
+            <div class="p-4 font-bold text-brand-500 bg-brand-50/50">HomeWorth</div>
+          </div>
+          <div class="grid grid-cols-4 text-center border-b border-slate-100">
+            <div class="p-4 text-sm text-slate-700 text-left">Daily logging required</div>
+            <div class="p-4 text-sm">❌ Yes</div>
+            <div class="p-4 text-sm">❌ Yes</div>
+            <div class="p-4 text-sm text-green-600 font-medium">✅ No</div>
+          </div>
+          <div class="grid grid-cols-4 text-center border-b border-slate-100">
+            <div class="p-4 text-sm text-slate-700 text-left">Net worth tracking</div>
+            <div class="p-4 text-sm text-slate-400">—</div>
+            <div class="p-4 text-sm text-slate-400">—</div>
+            <div class="p-4 text-sm text-green-600 font-medium">✅ Yes</div>
+          </div>
+          <div class="grid grid-cols-4 text-center border-b border-slate-100">
+            <div class="p-4 text-sm text-slate-700 text-left">100% private, local storage</div>
+            <div class="p-4 text-sm text-red-500">❌ No</div>
+            <div class="p-4 text-sm text-red-500">❌ No</div>
+            <div class="p-4 text-sm text-green-600 font-medium">✅ Yes</div>
+          </div>
+          <div class="grid grid-cols-4 text-center border-b border-slate-100">
+            <div class="p-4 text-sm text-slate-700 text-left">Weekly time commitment</div>
+            <div class="p-4 text-sm text-red-500">∞</div>
+            <div class="p-4 text-sm text-red-500">30+ min</div>
+            <div class="p-4 text-sm text-green-600 font-medium">2 min</div>
+          </div>
+          <div class="grid grid-cols-4 text-center">
+            <div class="p-4 text-sm text-slate-700 text-left">Price</div>
+            <div class="p-4 text-sm">Free*</div>
+            <div class="p-4 text-sm">$14.99/mo</div>
+            <div class="p-4 text-sm font-semibold text-brand-500">Free / $19.99/yr</div>
+          </div>
+          <div class="text-xs text-slate-400 px-4 pb-2 text-center">*Mint is shutting down. YNAB requires subscription. Data sold to advertisers.</div>
+        </div>
+      </div>
+
+      <!-- Social proof stats -->
+      <div class="grid grid-cols-3 gap-6 max-w-2xl mx-auto text-center fade-in">
+        <div>
+          <p class="text-3xl font-extrabold text-slate-900">100%</p>
+          <p class="text-sm text-slate-500">Local Storage</p>
+        </div>
+        <div>
+          <p class="text-3xl font-extrabold text-slate-900">2 min</p>
+          <p class="text-sm text-slate-500">Per week</p>
+        </div>
+        <div>
+          <p class="text-3xl font-extrabold text-slate-900">$0</p>
+          <p class="text-sm text-slate-500">To get started</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section id="pricing" class="py-16 md:py-24 bg-white">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16 fade-in">
+        <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Simple Pricing</h2>
+        <p class="text-lg text-slate-600">Start free. Upgrade when you're ready.</p>
+      </div>
+      <div class="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto fade-in">
+        <!-- Free -->
+        <div class="bg-white rounded-2xl p-8 border-2 border-slate-200">
+          <h3 class="text-xl font-bold text-slate-900 mb-2">Free Forever</h3>
+          <p class="text-4xl font-extrabold text-slate-900 mb-6">$0<span class="text-lg font-medium text-slate-500">/forever</span></p>
+          <ul class="space-y-3 mb-8">
+            <li class="flex items-center text-slate-700">
+              <span class="text-green-500 mr-2">✅</span> Unlimited asset tracking
+            </li>
+            <li class="flex items-center text-slate-700">
+              <span class="text-green-500 mr-2">✅</span> Net worth overview
+            </li>
+            <li class="flex items-center text-slate-700">
+              <span class="text-green-500 mr-2">✅</span> Asset checkup tool
+            </li>
+            <li class="flex items-center text-slate-700">
+              <span class="text-green-500 mr-2">✅</span> Weekly reminder
+            </li>
+          </ul>
+          <a href="https://apps.apple.com/app/idYOUR_APP_ID" class="block text-center border border-slate-300 hover:border-slate-400 text-slate-700 font-medium px-6 py-3 rounded-xl transition-colors">
+            Download Free
+          </a>
+        </div>
+        <!-- Pro -->
+        <div class="bg-brand-50 rounded-2xl p-8 border-2 border-brand-500 relative">
+          <div class="absolute -top-3 left-1/2 -translate-x-1/2">
+            <span class="bg-brand-500 text-white text-xs font-bold px-4 py-1 rounded-full">RECOMMENDED</span>
+          </div>
+          <h3 class="text-xl font-bold text-slate-900 mb-2">Pro</h3>
+          <p class="text-4xl font-extrabold text-slate-900 mb-1">$19.99<span class="text-lg font-medium text-slate-500">/year</span></p>
+          <p class="text-sm text-slate-500 mb-6">or $4.99/month</p>
+          <ul class="space-y-3 mb-8">
+            <li class="flex items-center text-slate-700">
+              <span class="text-green-500 mr-2">✅</span> Everything in Free
+            </li>
+            <li class="flex items-center text-slate-700">
+              <span class="text-green-500 mr-2">✅</span> Full trend history
+            </li>
+            <li class="flex items-center text-slate-700">
+              <span class="text-green-500 mr-2">✅</span> Data export & backup
+            </li>
+            <li class="flex items-center text-slate-700">
+              <span class="text-green-500 mr-2">✅</span> Detailed breakdowns
+            </li>
+            <li class="flex items-center text-slate-700">
+              <span class="text-green-500 mr-2">✅</span> 7-day free trial
+            </li>
+          </ul>
+          <a href="https://apps.apple.com/app/idYOUR_APP_ID" class="block text-center bg-brand-500 hover:bg-brand-600 text-white font-semibold px-6 py-3 rounded-xl transition-all hover:scale-105">
+            Start Free Trial
+          </a>
+        </div>
+      </div>
+      <p class="text-center text-sm text-slate-500 mt-8 fade-in">Cancel anytime. Your data stays on your device either way.</p>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="py-16 md:py-24 bg-slate-50">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16 fade-in">
+        <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Frequently Asked Questions</h2>
+      </div>
+      <div class="space-y-4 fade-in" id="faq-container">
+        <div class="faq-item bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <button class="faq-toggle w-full text-left px-6 py-5 flex items-center justify-between font-medium text-slate-900 hover:text-brand-500 transition-colors">
+            <span>What is a net worth tracker?</span>
+            <span class="faq-icon text-slate-400 transition-transform">▼</span>
+          </button>
+          <div class="faq-content hidden px-6 pb-5 text-slate-600">
+            A net worth tracker helps you see the total value of everything you own (cash, investments, property) minus what you owe (debts, loans). Unlike budgeting apps that focus on daily spending, HomeWorth gives you the big picture of your financial health.
+          </div>
+        </div>
+        <div class="faq-item bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <button class="faq-toggle w-full text-left px-6 py-5 flex items-center justify-between font-medium text-slate-900 hover:text-brand-500 transition-colors">
+            <span>Is HomeWorth free?</span>
+            <span class="faq-icon text-slate-400 transition-transform">▼</span>
+          </button>
+          <div class="faq-content hidden px-6 pb-5 text-slate-600">
+            Yes! The core features — tracking unlimited assets, viewing your net worth, and getting weekly reminders — are completely free. Pro subscribers get additional features like trend history and data export.
+          </div>
+        </div>
+        <div class="faq-item bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <button class="faq-toggle w-full text-left px-6 py-5 flex items-center justify-between font-medium text-slate-900 hover:text-brand-500 transition-colors">
+            <span>Do I need to log every transaction?</span>
+            <span class="faq-icon text-slate-400 transition-transform">▼</span>
+          </button>
+          <div class="faq-content hidden px-6 pb-5 text-slate-600">
+            Absolutely not. That's exactly why we built HomeWorth. Most budgeting apps require daily logging, which is exhausting and hard to maintain. HomeWorth only asks you to update your asset balances once a week — takes about 2 minutes.
+          </div>
+        </div>
+        <div class="faq-item bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <button class="faq-toggle w-full text-left px-6 py-5 flex items-center justify-between font-medium text-slate-900 hover:text-brand-500 transition-colors">
+            <span>Is my financial data safe?</span>
+            <span class="faq-icon text-slate-400 transition-transform">▼</span>
+          </button>
+          <div class="faq-content hidden px-6 pb-5 text-slate-600">
+            100%. HomeWorth stores all data locally on your iPhone. Nothing is uploaded to our servers, the cloud, or any third party. Your financial information never leaves your device.
+          </div>
+        </div>
+        <div class="faq-item bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <button class="faq-toggle w-full text-left px-6 py-5 flex items-center justify-between font-medium text-slate-900 hover:text-brand-500 transition-colors">
+            <span>Can couples use HomeWorth together?</span>
+            <span class="faq-icon text-slate-400 transition-transform">▼</span>
+          </button>
+          <div class="faq-content hidden px-6 pb-5 text-slate-600">
+            Yes. You can track all household assets in one place — cash accounts, investments, real estate, and shared debts.
+          </div>
+        </div>
+        <div class="faq-item bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <button class="faq-toggle w-full text-left px-6 py-5 flex items-center justify-between font-medium text-slate-900 hover:text-brand-500 transition-colors">
+            <span>What's the difference between net worth and a budget?</span>
+            <span class="faq-icon text-slate-400 transition-transform">▼</span>
+          </button>
+          <div class="faq-content hidden px-6 pb-5 text-slate-600">
+            A budget tracks your income and expenses month-to-month. Your net worth is the total value of everything you own minus everything you owe. Budgets help you spend less. Net worth tracking helps you build wealth.
+          </div>
+        </div>
+        <div class="faq-item bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <button class="faq-toggle w-full text-left px-6 py-5 flex items-center justify-between font-medium text-slate-900 hover:text-brand-500 transition-colors">
+            <span>Does HomeWorth connect to my bank?</span>
+            <span class="faq-icon text-slate-400 transition-transform">▼</span>
+          </button>
+          <div class="faq-content hidden px-6 pb-5 text-slate-600">
+            No, and that's intentional. We don't ask for bank passwords or account numbers. You manually enter your asset values — which is what makes HomeWorth private, secure, and surprisingly simple.
+          </div>
+        </div>
+        <div class="faq-item bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <button class="faq-toggle w-full text-left px-6 py-5 flex items-center justify-between font-medium text-slate-900 hover:text-brand-500 transition-colors">
+            <span>How does the 7-day free trial work?</span>
+            <span class="faq-icon text-slate-400 transition-transform">▼</span>
+          </button>
+          <div class="faq-content hidden px-6 pb-5 text-slate-600">
+            When you subscribe to the yearly plan, you get 7 days of Pro features for free. If you cancel within those 7 days, you're not charged. You can cancel anytime in your iPhone settings.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Final CTA -->
+  <section class="py-20 md:py-28 bg-slate-900 text-white">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center fade-in">
+      <h2 class="text-3xl md:text-5xl font-extrabold mb-6">Start Tracking Your Net Worth Today</h2>
+      <p class="text-xl text-slate-400 mb-10">Join thousands of users who check their wealth in 2 minutes a week.</p>
+      <div class="flex flex-col items-center gap-4">
+        <img src="IMG_3042.JPG" alt="Scan to download HomeWorth" class="w-44 h-44 object-contain bg-white rounded-2xl shadow-xl">
+        <p class="text-sm text-slate-500">Scan with your iPhone camera to download</p>
+      </div>
+      <p class="text-sm text-slate-500 mt-4">Free download · No credit card required · 7-day Pro trial</p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-slate-950 text-slate-400 py-12">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid md:grid-cols-4 gap-8 mb-8">
+        <div class="md:col-span-2">
+          <span class="text-xl font-bold text-white mb-2 block">HomeWorth</span>
+          <p class="text-sm">Track your net worth, not your receipts.</p>
+        </div>
+        <div>
+          <h4 class="text-white font-semibold mb-3 text-sm">Product</h4>
+          <ul class="space-y-2 text-sm">
+            <li><a href="#features" class="hover:text-white transition-colors">Features</a></li>
+            <li><a href="#pricing" class="hover:text-white transition-colors">Pricing</a></li>
+            <li><a href="#faq" class="hover:text-white transition-colors">FAQ</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-white font-semibold mb-3 text-sm">Legal</h4>
+          <ul class="space-y-2 text-sm">
+            <li><a href="privacy-policy.html" class="hover:text-white transition-colors">Privacy Policy</a></li>
+            <li><a href="terms.html" class="hover:text-white transition-colors">Terms of Service</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center text-sm">
+        <p>© 2026 HomeWorth. All rights reserved.</p>
+        <p class="mt-2 md:mt-0">Contact: huangxiaohao7023@icloud.com</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+    // Navbar scroll effect
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) {
+        navbar.classList.add('bg-white', 'shadow-sm');
+        navbar.classList.remove('bg-transparent');
+      } else {
+        navbar.classList.remove('bg-white', 'shadow-sm');
+        navbar.classList.add('bg-transparent');
+      }
+    });
+
+    // FAQ accordion
+    document.querySelectorAll('.faq-toggle').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const content = btn.nextElementSibling;
+        const icon = btn.querySelector('.faq-icon');
+        content.classList.toggle('hidden');
+        icon.style.transform = content.classList.contains('hidden') ? '' : 'rotate(180deg)';
+      });
+    });
+
+    // Floating nav QR: show after scrolling 600px
+    const navQR = document.getElementById('nav-qr');
+
+    function updateNavQR() {
+      if (window.scrollY > 600) {
+        navQR.classList.remove('-translate-y-full', 'opacity-0');
+        navQR.classList.add('translate-y-0', 'opacity-100');
+        navQR.style.pointerEvents = 'auto';
+      } else {
+        navQR.classList.add('-translate-y-full', 'opacity-0');
+        navQR.classList.remove('translate-y-0', 'opacity-100');
+        navQR.style.pointerEvents = 'none';
+      }
+    }
+
+    window.addEventListener('scroll', updateNavQR, { passive: true });
+    updateNavQR();
+
+    // Fade-in on scroll
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    });
+  </script>
+
+  <!-- Floating QR under nav -->
+  <div id="nav-qr" class="fixed top-16 left-0 right-0 z-40 flex justify-center py-3 bg-white/95 backdrop-blur border-b border-slate-200 shadow-sm transform -translate-y-full opacity-0 transition-all duration-300 pointer-events-none">
+    <div class="flex items-center gap-3">
+      <img src="IMG_3042.JPG" alt="Download QR" class="w-12 h-12 rounded-lg object-contain bg-white border border-slate-200">
+      <div class="text-left">
+        <p class="text-sm font-medium text-slate-700">Scan to download</p>
+        <p class="text-xs text-slate-500">HomeWorth on the App Store</p>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
